@@ -12,6 +12,12 @@
 </head>
 
 <body>
+  <!-- Botão do menu mobile -->
+  <button class="menu-toggle" id="menuToggle">☰ Menu</button>
+  
+  <!-- Overlay para fechar o menu -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <div id="sidebar">
     <img src="img/logo-asl.jfif" alt="">
     <form action="/upload" method="post" enctype="multipart/form-data">
@@ -312,14 +318,55 @@
         }
       }
 
-      window.addEventListener('resize', () => {
-        if (camera && renderer) {
-          camera.aspect = (window.innerWidth - 250) / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth - 250, window.innerHeight);
-        }
-      });
+      // Controle do menu mobile
+      function setupMobileMenu() {
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
 
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+          overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+        });
+
+        // Fechar menu ao clicar em um item da galeria
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+          item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+              sidebar.classList.remove('active');
+              overlay.classList.remove('active');
+            }
+          });
+        });
+      }
+
+      // Redimensionamento responsivo do renderer
+      function handleResize() {
+        if (camera && renderer) {
+          const sidebarWidth = window.innerWidth <= 768 ? 0 : 
+                              window.innerWidth <= 1024 ? 220 : 
+                              window.innerWidth >= 1440 ? 300 : 250;
+          
+          const width = window.innerWidth - sidebarWidth;
+          const height = window.innerHeight;
+          
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+          renderer.setSize(width, height);
+        }
+      }
+
+      window.addEventListener('resize', handleResize);
+      
+      // Inicializa menu mobile
+      setupMobileMenu();
+      
       document.getElementById('resetCamera').addEventListener('click', resetCamera);
       document.getElementById('zoomExtents').addEventListener('click', zoomExtents);
       document.getElementById('toggleBackground').addEventListener('click', toggleBackground);
