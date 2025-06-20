@@ -3,21 +3,31 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visualizador 3D STL - Estilo Viewer Médico</title>
-  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/STLLoader.js"></script>
 </head>
 
 <body>
   <div id="sidebar">
-    <h2>Galeria de STL</h2>
+    <img src="img/logo-asl.jfif" alt="">
     <form action="/upload" method="post" enctype="multipart/form-data">
       <input type="file" name="stlFile" accept=".stl" required>
       <button type="submit">Upload</button>
     </form>
     <div id="gallery"></div>
+    
+    <!-- Instruções de controle -->
+    <div id="controls-info">
+      <h4>Controles:</h4>
+      <p>• Setas: Rotacionar</p>
+      <p>• +/-: Zoom</p>
+      <p>• R: Reset câmera</p>
+      <p>• B: Trocar fundo</p>
+    </div>
   </div>
 
   <div id="viewer">
@@ -29,7 +39,296 @@
     <div id="renderArea"></div>
   </div>
 
-  <script src="/public/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const gallery = document.getElementById('gallery');
+      let scene, camera, renderer, controls, mesh;
+      let darkBackground = true;
+      let keyPressed = {};
+
+      function initRenderer() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth - 250, window.innerHeight);
+        renderer.setClearColor(darkBackground ? 0x000000 : 0xffffff);
+        
+        const renderArea = document.getElementById('renderArea');
+        renderArea.innerHTML = '';
+        renderArea.appendChild(renderer.domElement);
+
+        // Iluminação melhorada
+        scene.add(new THREE.AmbientLight(0x404040, 0.4));
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+        
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+        directionalLight2.position.set(-1, -1, -1);
+        scene.add(directionalLight2);
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        
+        camera.position.set(0, 0, 10);
+        controls.update();
+
+        animate();
+      }
+
+      // Controles do teclado
+      function setupKeyboardControls() {
+        document.addEventListener('keydown', (event) => {
+          keyPressed[event.code] = true;
+          
+          // Previne o comportamento padrão das setas
+          if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.code)) {
+            event.preventDefault();
+          }
+          
+          handleKeyPress(event.code);
+        });
+
+        document.addEventListener('keyup', (event) => {
+          keyPressed[event.code] = false;
+        });
+      }
+
+      function handleKeyPress(keyCode) {
+        if (!controls || !camera) return;
+
+        const rotationSpeed = 0.1;
+        const zoomSpeed = 0.1;
+
+        switch(keyCode) {
+          case 'ArrowUp':
+            // Rotaciona para cima
+            controls.object.position.y += Math.sin(controls.getPolarAngle()) * rotationSpeed;
+            break;
+          case 'ArrowDown':
+            // Rotaciona para baixo
+            controls.object.position.y -= Math.sin(controls.getPolarAngle()) * rotationSpeed;
+            break;
+          case 'ArrowLeft':
+            // Rotaciona para esquerda
+            const leftAngle = controls.getAzimuthalAngle() + rotationSpeed;
+            const leftRadius = controls.getDistance();
+            controls.object.position.x = controls.target.x + leftRadius * Math.sin(leftAngle);
+            controls.object.position.z = controls.target.z + leftRadius * Math.cos(leftAngle);
+            break;
+          case 'ArrowRight':
+            // Rotaciona para direita
+            const rightAngle = controls.getAzimuthalAngle() - rotationSpeed;
+            const rightRadius = controls.getDistance();
+            controls.object.position.x = controls.target.x + rightRadius * Math.sin(rightAngle);
+            controls.object.position.z = controls.target.z + rightRadius * Math.cos(rightAngle);
+            break;
+          case 'Equal':
+          case 'NumpadAdd':
+            // Zoom in
+            camera.position.multiplyScalar(1 - zoomSpeed);
+            break;
+          case 'Minus':
+          case 'NumpadSubtract':
+            // Zoom out
+            camera.position.multiplyScalar(1 + zoomSpeed);
+            break;
+          case 'KeyR':
+            // Reset câmera
+            resetCamera();
+            break;
+          case 'KeyB':
+            // Trocar fundo
+            toggleBackground();
+            break;
+        }
+        
+        controls.update();
+      }
+
+      // Controle contínuo para teclas mantidas pressionadas
+      function handleContinuousKeys() {
+        if (!controls || !camera) return;
+
+        const rotationSpeed = 0.02;
+        const zoomSpeed = 0.02;
+
+        if (keyPressed['ArrowUp']) {
+          const spherical = new THREE.Spherical();
+          spherical.setFromVector3(camera.position.clone().sub(controls.target));
+          spherical.phi = Math.max(0.1, spherical.phi - rotationSpeed);
+          camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(spherical));
+        }
+        if (keyPressed['ArrowDown']) {
+          const spherical = new THREE.Spherical();
+          spherical.setFromVector3(camera.position.clone().sub(controls.target));
+          spherical.phi = Math.min(Math.PI - 0.1, spherical.phi + rotationSpeed);
+          camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(spherical));
+        }
+        if (keyPressed['ArrowLeft']) {
+          const spherical = new THREE.Spherical();
+          spherical.setFromVector3(camera.position.clone().sub(controls.target));
+          spherical.theta += rotationSpeed;
+          camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(spherical));
+        }
+        if (keyPressed['ArrowRight']) {
+          const spherical = new THREE.Spherical();
+          spherical.setFromVector3(camera.position.clone().sub(controls.target));
+          spherical.theta -= rotationSpeed;
+          camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(spherical));
+        }
+        if (keyPressed['Equal'] || keyPressed['NumpadAdd']) {
+          camera.position.lerp(controls.target, zoomSpeed);
+        }
+        if (keyPressed['Minus'] || keyPressed['NumpadSubtract']) {
+          const direction = camera.position.clone().sub(controls.target).normalize();
+          camera.position.add(direction.multiplyScalar(zoomSpeed * 2));
+        }
+
+        controls.update();
+      }
+
+      function loadGallery() {
+        fetch('/list-files')
+          .then(res => res.json())
+          .then(files => {
+            gallery.innerHTML = '';
+            files.forEach(file => {
+              const div = document.createElement('div');
+              div.classList.add('gallery-item');
+              div.textContent = file;
+              
+              div.addEventListener('click', () => {
+                console.log('Carregando arquivo:', file);
+                loadSTL(`/uploads/${file}`);
+              });
+              
+              gallery.appendChild(div);
+            });
+          })
+          .catch(err => {
+            console.error('Erro ao carregar galeria:', err);
+          });
+      }
+
+      function loadSTL(url) {
+        console.log('Iniciando carregamento do STL:', url);
+        
+        if (!scene) {
+          console.log('Inicializando renderer...');
+          initRenderer();
+        }
+
+        const loader = new THREE.STLLoader();
+
+        loader.load(
+          url,
+          function(geometry) {
+            console.log('STL carregado com sucesso:', geometry);
+            
+            if (mesh) {
+              scene.remove(mesh);
+            }
+
+            geometry.computeBoundingBox();
+            const center = new THREE.Vector3();
+            geometry.boundingBox.getCenter(center);
+            geometry.translate(-center.x, -center.y, -center.z);
+
+            const material = new THREE.MeshLambertMaterial({ 
+              
+            });
+            
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            
+            console.log('Mesh adicionado à cena');
+            zoomExtents();
+          },
+          function(progress) {
+            console.log('Progresso do carregamento:', (progress.loaded / progress.total * 100) + '%');
+          },
+          function(error) {
+            console.error('Erro ao carregar STL:', error);
+            alert('Erro ao carregar o arquivo STL. Verifique se o arquivo é válido.');
+          }
+        );
+      }
+
+      function zoomExtents() {
+        if (!mesh) {
+          console.log('Nenhum mesh para ajustar zoom');
+          return;
+        }
+        
+        const box = new THREE.Box3().setFromObject(mesh);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const center = box.getCenter(new THREE.Vector3());
+
+        console.log('Ajustando câmera - Tamanho:', size, 'Centro:', center);
+
+        camera.near = size / 1000;
+        camera.far = size * 1000;
+        camera.updateProjectionMatrix();
+        
+        const distance = size * 1.5;
+        camera.position.copy(center);
+        camera.position.x += distance;
+        camera.position.y += distance * 0.5;
+        camera.position.z += distance;
+        
+        camera.lookAt(center);
+        controls.target.copy(center);
+        controls.update();
+        
+        console.log('Câmera ajustada');
+      }
+
+      function resetCamera() {
+        if (mesh) {
+          zoomExtents();
+        } else {
+          camera.position.set(0, 0, 10);
+          controls.target.set(0, 0, 0);
+          controls.update();
+        }
+      }
+
+      function toggleBackground() {
+        darkBackground = !darkBackground;
+        if (renderer) {
+          renderer.setClearColor(darkBackground ? 0x000000 : 0xffffff);
+        }
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        handleContinuousKeys(); // Processa teclas mantidas pressionadas
+        if (controls) controls.update();
+        if (renderer && scene && camera) {
+          renderer.render(scene, camera);
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        if (camera && renderer) {
+          camera.aspect = (window.innerWidth - 250) / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth - 250, window.innerHeight);
+        }
+      });
+
+      document.getElementById('resetCamera').addEventListener('click', resetCamera);
+      document.getElementById('zoomExtents').addEventListener('click', zoomExtents);
+      document.getElementById('toggleBackground').addEventListener('click', toggleBackground);
+
+      // Inicializa controles do teclado
+      setupKeyboardControls();
+      loadGallery();
+    });
+  </script>
 </body>
 
 </html>
