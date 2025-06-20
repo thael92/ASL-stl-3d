@@ -4,29 +4,30 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Upload de arquivos STL
+// Configuração do Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, file.originalname)
+  filename: (req, file, cb) => cb(null, file.originalname),
 });
-
 const upload = multer({ storage });
 
-app.post('/upload', upload.single('stlFile'), (req, res) => {
-  res.redirect('/');
-});
-
-// Listar arquivos STL
+app.post('/upload', upload.single('stlFile'), (req, res) => res.redirect('/'));
 app.get('/list-files', (req, res) => {
   fs.readdir('uploads/', (err, files) => {
     if (err) return res.status(500).send('Erro ao listar arquivos');
-    res.json(files.filter(file => path.extname(file).toLowerCase() === '.stl'));
+    res.json(files.filter(f => path.extname(f).toLowerCase() === '.stl'));
   });
 });
 
-app.listen(PORT, () => console.log(`Servidor rodando: http://localhost:${PORT}`));
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+);
+
+app.listen(PORT, () =>
+  console.log(`Servidor rodando em http://localhost:${PORT}`)
+);
