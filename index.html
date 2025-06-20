@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizador 3D STL - Estilo Viewer Médico</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/loaders/STLLoader.js"></script>
+</head>
+<body>
+  <div id="sidebar">
+    <h2>Galeria de STL</h2>
+    <form action="/uploads/Giraffe skull.stl" method="post" enctype="multipart/form-data">
+      <input type="file" name="stlFile" accept=".stl" required>
+      <button type="submit">Upload</button>
+    </form>
+    <div id="gallery"></div>
+  </div>
+
+  <div id="viewer">
+    <div id="toolbar">
+      <button id="resetCamera">Reset Câmera</button>
+      <button id="zoomExtents">Zoom Extents</button>
+      <button id="toggleBackground">Fundo Claro/Escuro</button>
+    </div>
+    <div id="renderArea"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
