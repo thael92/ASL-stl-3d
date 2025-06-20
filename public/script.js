@@ -100,8 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Cria material e mesh
         const material = new THREE.MeshLambertMaterial({ 
-          color: 0x00ff00,
-          side: THREE.DoubleSide 
+          
         });
         
         mesh = new THREE.Mesh(geometry, material);
