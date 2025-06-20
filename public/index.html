@@ -64,7 +64,7 @@
         renderArea.appendChild(renderer.domElement);
 
         // Iluminação melhorada
-        scene.add(new THREE.AmbientLight(0x404040, 0.4));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.2));
         
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(1, 1, 1);
