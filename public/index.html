@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Visualizador 3D STL - Estilo Viewer Médico</title>
@@ -8,10 +9,11 @@
   <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/js/loaders/STLLoader.js"></script>
 </head>
+
 <body>
   <div id="sidebar">
     <h2>Galeria de STL</h2>
-    <form action="/uploads" method="post" enctype="multipart/form-data">
+    <form action="/upload" method="post" enctype="multipart/form-data">
       <input type="file" name="stlFile" accept=".stl" required>
       <button type="submit">Upload</button>
     </form>
@@ -29,4 +31,5 @@
 
   <script src="/public/script.js"></script>
 </body>
+
 </html>
