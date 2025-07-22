@@ -76,7 +76,6 @@ body {
   flex-grow: 1;
   overflow: hidden;
   position: relative;
-  left: -15%;
 }
 
 #renderArea canvas {

@@ -62,6 +62,10 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      if (window.innerWidth <= 768) {
+        document.body.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; font-family: sans-serif; flex-direction: column;"><h1>Acesso Restrito</h1><p>Este site não é otimizado para dispositivos móveis. Por favor, acesse-o em um notebook, PC ou televisão para uma melhor experiência.</p></div>';
+        return;
+      }
       let scene, camera, renderer, controls;
       let darkBackground = true;
       let keyPressed = {};
