@@ -83,20 +83,20 @@
         }
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer({
           antialias: true
         });
-        const leftSidebarWidth = window.innerWidth <= 768 ? 0 :
-          window.innerWidth <= 1024 ? 220 :
-            window.innerWidth >= 1440 ? 300 : 250;
-        const rightSidebarWidth = window.innerWidth <= 768 ? 0 : 300;
-        renderer.setSize(window.innerWidth - leftSidebarWidth - rightSidebarWidth, window.innerHeight);
         renderer.setClearColor(darkBackground ? 0x000000 : 0xffffff);
 
         const renderArea = document.getElementById('renderArea');
         renderArea.innerHTML = '';
         renderArea.appendChild(renderer.domElement);
+
+        const width = renderArea.clientWidth;
+        const height = renderArea.clientHeight;
+
+        camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        renderer.setSize(width, height);
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.2));
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -462,12 +462,9 @@
 
       function handleResize() {
         if (camera && renderer) {
-          const leftSidebarWidth = window.innerWidth <= 768 ? 0 :
-            window.innerWidth <= 1024 ? 220 :
-              window.innerWidth >= 1440 ? 300 : 250;
-          const rightSidebarWidth = window.innerWidth <= 768 ? 0 : 300;
-          const width = window.innerWidth - leftSidebarWidth - rightSidebarWidth;
-          const height = window.innerHeight;
+          const renderArea = document.getElementById('renderArea');
+          const width = renderArea.clientWidth;
+          const height = renderArea.clientHeight;
 
           camera.aspect = width / height;
           camera.updateProjectionMatrix();
