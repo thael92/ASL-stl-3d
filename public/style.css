@@ -1,159 +1,82 @@
-/* Reset e configurações base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  margin: 0;
+  font-family: sans-serif;
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Prevent body scroll */
+  background-color: #f8f9fa;
 }
 
-/* Sidebar */
-#sidebar {
-  width: 250px;
-  min-width: 200px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 15px;
-  overflow-y: auto;
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
 
-#sidebar img {
-  width: 90%;
-  max-width: 180px;
+
+/* Removido o estilo do logo aqui, pois ele foi movido para o right-sidebar */
+ #sidebar img {
+  max-width: 100%;
   height: auto;
-  display: block;
-  margin: 10px auto 20px auto;
-  padding: 8px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+  margin-bottom: 20px;
+} 
 
-#sidebar h2 {
-  margin-top: 0;
-  color: #ecf0f1;
-  font-size: 1.2rem;
-}
-
-#sidebar form {
-  margin-bottom: 15px;
-}
-
-#sidebar input[type="file"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #34495e;
-  border-radius: 4px;
-  background-color: #34495e;
-  color: white;
-  font-size: 0.9rem;
-}
-
-#sidebar button {
-  width: 100%;
-  padding: 10px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-#sidebar button:hover {
-  background-color: #2980b9;
-}
-
-#gallery {
-  margin-top: 15px;
-}
-
-.gallery-item {
-  padding: 8px;
-  margin: 4px 0;
-  background-color: #34495e;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  word-wrap: break-word;
-  font-size: 0.85rem;
-}
-
-.gallery-item:hover {
-  background-color: #4a6478;
-}
-
-#controls-info {
+#sidebar h4 {
   margin-top: 20px;
-  padding: 12px;
-  background-color: #34495e;
-  border-radius: 8px;
-  font-size: 0.75rem;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-#controls-info h4 {
-  margin: 0 0 8px 0;
-  color: #3498db;
-  font-size: 0.85rem;
-}
-
-#controls-info p {
-  margin: 3px 0;
-  color: #ecf0f1;
-}
-
-/* Viewer */
 #viewer {
-  flex: 1;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #ecf0f1;
-  min-width: 0;
+  position: relative;
+  background-color: #000;
 }
 
-#toolbar {
-  height: 50px;
-  background-color: #34495e;
+#top-toolbar {
+  background-color: #333;
+  padding: 10px;
   display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  color: white;
+  z-index: 10;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 0 10px;
-  gap: 8px;
-  flex-shrink: 0;
-  overflow-x: auto;
 }
 
+#top-toolbar button,
 #toolbar button {
-  padding: 6px 12px;
-  background-color: #3498db;
+  background-color: #555;
   color: white;
   border: none;
-  border-radius: 4px;
+  padding: 8px 12px;
   cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  font-size: 0.9em;
   white-space: nowrap;
-  font-size: 0.85rem;
-  transition: background-color 0.3s;
-  flex-shrink: 0;
 }
 
+#top-toolbar button:hover,
 #toolbar button:hover {
-  background-color: #2980b9;
+  background-color: #777;
 }
+
+#top-toolbar input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+#top-toolbar label {
+  color: white;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+}
+
 
 #renderArea {
-  flex: 1;
-  background-color: #000;
-  position: relative;
+  flex-grow: 1;
   overflow: hidden;
+  position: relative;
+  left: -15%;
 }
 
 #renderArea canvas {
@@ -162,27 +85,241 @@ body {
   height: 100% !important;
 }
 
-/* Menu toggle para mobile */
+/* Right Sidebar Styling */
+#right-sidebar {
+  width: 300px;
+  background-color: #f0f0f0;
+  padding: 15px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  padding-top: 20px; /* Espaçamento superior para a logo */
+}
+
+#right-sidebar img {
+  max-width: 80%; /* Ajusta o tamanho da logo */
+  height: auto;
+  border-radius: 100px;
+  margin-bottom: 20px; /* Espaço abaixo da logo */
+}
+
+/* Removido o estilo .info-section, pois a seção foi removida */
+/* #right-sidebar .info-section, */
+#right-sidebar .upload-section,
+#right-sidebar .visualize-section {
+  width: 100%; /* Garante que as seções internas ocupem a largura do sidebar */
+  padding: 0 15px 15px; /* Ajusta o padding para que o conteúdo não fique colado nas bordas do sidebar */
+  box-sizing: border-box; /* Inclui padding na largura */
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+#right-sidebar .visualize-section {
+    border-bottom: none;
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+
+#right-sidebar h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#right-sidebar h4 .icon {
+    font-size: 1.2em;
+}
+
+/* Removido o estilo .info-item, label, select e input[type="text"] relacionados à seção de informações */
+/* #right-sidebar .info-item {
+  margin-bottom: 10px;
+}
+#right-sidebar label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+  font-size: 0.9em;
+}
+#right-sidebar select,
+#right-sidebar input[type="text"] {
+  width: calc(100% - 18px);
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+} */
+
+/* File Upload Specific Styles */
+.upload-section {
+  text-align: center;
+}
+
+.file-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+#stlUploadInput {
+  display: none;
+}
+
+.custom-file-upload {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9em;
+  flex-shrink: 0;
+}
+
+.custom-file-upload:hover {
+  background-color: #0056b3;
+}
+
+#selectedFileNames {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #555;
+  min-width: 80px;
+}
+
+#uploadStlFiles {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+#uploadStlFiles:hover {
+  background-color: #218838;
+}
+
+/* Visualize STL Section */
+#loadedStlFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stl-file-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #e9ecef;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  font-size: 0.9em;
+  position: relative;
+}
+
+.stl-file-item .file-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.stl-file-item .file-name {
+  flex-grow: 1;
+  font-weight: bold;
+  color: #333;
+}
+
+.stl-file-item .file-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.stl-file-item .file-actions button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.stl-file-item .file-actions button:hover {
+  background-color: #5a6268;
+}
+
+.stl-file-item .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.stl-file-item .progress-bar-wrapper {
+  flex-grow: 1;
+  height: 5px;
+  background-color: #e0e0e0;
+  border-radius: 2.5px;
+  overflow: hidden;
+}
+
+.stl-file-item .progress-bar {
+  height: 100%;
+  background-color: #007bff;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+.stl-file-item .progress-text {
+  font-size: 0.7em;
+  color: #555;
+  white-space: nowrap;
+}
+
+
+/* Mobile Menu Controls */
 .menu-toggle {
   display: none;
   position: fixed;
   top: 10px;
   left: 10px;
-  z-index: 1001;
-  background-color: #3498db;
+  z-index: 101;
+  background-color: #333;
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.menu-toggle:hover {
-  background-color: #2980b9;
-}
-
-/* Overlay para mobile */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -191,417 +328,89 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 90;
 }
 
-/* Tablets (768px - 1024px) */
-@media screen and (max-width: 1024px) {
-  #sidebar {
-    width: 220px;
-    padding: 12px;
-  }
-  
-  #sidebar img {
-    max-width: 150px;
-    margin: 8px auto 15px auto;
-  }
-  
-  #toolbar {
-    padding: 0 8px;
-    gap: 6px;
-  }
-  
-  #toolbar button {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-  }
+.sidebar-overlay.active {
+  display: block;
 }
 
-/* Tablets pequenos e smartphones grandes (481px - 768px) */
-@media screen and (max-width: 768px) {
+/* Responsive adjustments */
+@media (max-width: 768px) {
   body {
-    flex-direction: row;
-  }
-  
-  .menu-toggle {
-    display: block;
-    top: 45px;
-  }
-  
-  #sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 280px;
-    transform: translateX(-100%);
-    z-index: 1000;
-  }
-  
-  #sidebar.active {
-    transform: translateX(0);
-  }
-  
-  .sidebar-overlay.active {
-    display: block;
-  }
-  
-  #viewer {
-    width: 100%;
-    margin-left: 0;
-  }
-  
-  #toolbar {
-    height: 45px;
-    padding: 0 50px 0 8px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  
-  #toolbar button {
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    min-width: 80px;
-  }
-  
-  #controls-info {
-    font-size: 0.7rem;
-  }
-}
-
-/* Smartphones (320px - 480px) */
-@media screen and (max-width: 480px) {
-  #sidebar {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  #sidebar img {
-    max-width: 120px;
-    margin: 5px auto 10px auto;
-    padding: 5px;
-  }
-  
-  #sidebar h2 {
-    font-size: 1rem;
-  }
-  
-  #sidebar input[type="file"] {
-    padding: 6px;
-    font-size: 0.8rem;
-  }
-  
-  #sidebar button {
-    padding: 8px;
-    font-size: 0.8rem;
-  }
-  
-  .gallery-item {
-    padding: 6px;
-    font-size: 0.8rem;
-  }
-  
-  #toolbar {
-    height: 40px;
-    padding: 0 45px 0 5px;
-  }
-  
-  #toolbar button {
-    padding: 3px 6px;
-    font-size: 0.7rem;
-    min-width: 70px;
-  }
-  
-  #controls-info {
-    padding: 8px;
-    margin-top: 15px;
-    font-size: 0.65rem;
-  }
-  
-  #controls-info h4 {
-    font-size: 0.75rem;
-  }
-}
-
-/* Smartphones muito pequenos (até 320px) */
-@media screen and (max-width: 320px) {
-  #sidebar {
-    padding: 8px;
-  }
-  
-  #sidebar img {
-    max-width: 100px;
-  }
-  
-  #toolbar button {
-    min-width: 60px;
-    font-size: 0.65rem;
-  }
-  
-  #controls-info {
-    font-size: 0.6rem;
-  }
-}
-
-/* Orientação landscape para smartphones */
-@media screen and (max-height: 500px) and (orientation: landscape) {
-  #sidebar {
-    width: 250px;
-  }
-  
-  #sidebar img {
-    max-width: 80px;
-    margin: 5px auto 8px auto;
-  }
-  
-  #controls-info {
-    margin-top: 10px;
-    padding: 6px;
-  }
-  
-  .gallery-item {
-    padding: 4px;
-    margin: 2px 0;
-  }
-}
-
-/* Telas muito grandes (1440px+) */
-@media screen and (min-width: 1440px) {
-  #sidebar {
-    width: 300px;
-    padding: 25px;
-  }
-  
-  #sidebar img {
-    max-width: 220px;
-  }
-  
-  #toolbar {
-    height: 55px;
-    padding: 0 20px;
-    gap: 12px;
-  }
-  
-  #toolbar button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Ajustes para dispositivos com touch */
-@media (hover: none) and (pointer: coarse) {
-  #sidebar button,
-  #toolbar button,
-  .gallery-item {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .gallery-item {
-    margin: 6px 0;
-  }
-}
-
-/* Print styles */
-@media print {
-  #sidebar {
-    display: none;
-  }
-  
-  #toolbar {
-    display: none;
-  }
-  
-  #viewer {
-    width: 100%;
-  }
-}
-/* Adicione estas regras ao seu CSS existente */
-
-/* Gallery item com botão de delete */
-.gallery-item {
-  padding: 8px;
-  margin: 4px 0;
-  background-color: #34495e;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  word-wrap: break-word;
-  font-size: 0.85rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
-
-.gallery-item:hover {
-  background-color: #4a6478;
-}
-
-.file-name {
-  flex: 1;
-  cursor: pointer;
-  padding: 2px 0;
-}
-
-.delete-btn {
-  background: #e74c3c;
-  border: none;
-  border-radius: 3px;
-  color: white;
-  cursor: pointer;
-  padding: 4px 6px;
-  font-size: 0.8rem;
-  transition: background-color 0.3s;
-  flex-shrink: 0;
-  min-width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.delete-btn:hover {
-  background: #c0392b;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-.modal-content h3 {
-  margin: 0 0 15px 0;
-  color: #2c3e50;
-  font-size: 1.2rem;
-}
-
-.modal-content p {
-  margin: 0 0 20px 0;
-  color: #34495e;
-  line-height: 1.4;
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.btn-danger {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.btn-danger:hover {
-  background-color: #c0392b;
-}
-
-.btn-secondary {
-  background-color: #95a5a6;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s;
-}
-
-.btn-secondary:hover {
-  background-color: #7f8c8d;
-}
-
-/* Notificações */
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  z-index: 1500;
-  animation: slideIn 0.3s ease;
-}
-
-.notification-success {
-  background-color: #27ae60;
-}
-
-.notification-error {
-  background-color: #e74c3c;
-}
-
-.notification-info {
-  background-color: #3498db;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Responsivo para mobile */
-@media screen and (max-width: 480px) {
-  .modal-content {
-    padding: 15px;
-    margin: 20px;
-  }
-  
-  .modal-buttons {
     flex-direction: column;
   }
-  
-  .btn-danger,
-  .btn-secondary {
+
+  #sidebar {
+    width: 0;
+    position: fixed;
+    height: 100%;
+    left: -250px;
+    transition: left 0.3s ease-in-out;
+  }
+
+  #sidebar.active {
+    left: 0;
+    width: 250px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  #viewer {
+    margin-left: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    margin: 5px 0;
   }
-  
-  .delete-btn {
-    min-width: 32px;
-    height: 32px;
-    font-size: 0.9rem;
+
+  #right-sidebar {
+    width: 100%;
+    position: relative;
+    height: auto;
+    box-shadow: none;
+    order: 3;
+    flex-shrink: 0;
+    padding-left: 0; /* Remove padding lateral que causa deslocamento em 100% de largura */
+    padding-right: 0; /* Remove padding lateral que causa deslocamento em 100% de largura */
   }
-  
-  .notification {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-    text-align: center;
+
+  /* Ajusta o padding das seções internas quando o right-sidebar está em 100% */
+  #right-sidebar .upload-section,
+  #right-sidebar .visualize-section {
+    padding-left: 15px;
+    padding-right: 15px;
   }
+
+  #top-toolbar {
+    order: 1;
+    justify-content: center;
+  }
+
+  #renderArea {
+    order: 2;
+    height: 60vh;
+  }
+
+  .file-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .custom-file-upload,
+  #selectedFileNames {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+    #sidebar {
+        position: relative;
+        left: 0;
+    }
+    .menu-toggle, .sidebar-overlay {
+        display: none !important;
+    }
 }

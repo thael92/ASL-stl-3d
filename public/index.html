@@ -12,64 +12,92 @@
 </head>
 
 <body>
-  <!-- Botão do menu mobile -->
   <button class="menu-toggle" id="menuToggle">☰ Menu</button>
-  
-  <!-- Overlay para fechar o menu -->
+
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <div id="sidebar">
-    <img src="img/logo-asl.jfif" alt="">
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="stlFile" accept=".stl" required>
-      <button type="submit">Upload</button>
-    </form>
-    <div id="gallery"></div>
-    
-    <!-- Instruções de controle -->
     <div id="controls-info">
-      <h4>Controles:</h4>
-      <p>• Setas: Rotacionar</p>
-      <p>• +/-: Zoom</p>
-      <p>• R: Reset câmera</p>
-      <p>• B: Trocar fundo</p>
+
     </div>
   </div>
 
   <div id="viewer">
-    <div id="toolbar">
-      <button id="resetCamera">Reset Câmera</button>
-      <button id="zoomExtents">Zoom Extents</button>
+    <div id="top-toolbar">
+      <button id="viewLeft"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/></svg> Lateral Esquerda</button>
+      <button id="viewRight"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/></svg> Lateral Direita</button>
+      <button id="viewTop"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/></svg> Oclusal Superior</button>
+      <button id="viewBottom"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/></svg> Oclusal Inferior</button>
       <button id="toggleBackground">Fundo Claro/Escuro</button>
+      <button id="fullscreenBtn" style="position: absolute; top: 10px; right: 10px; z-index: 20;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>
+        </svg>
+      </button>
     </div>
+
     <div id="renderArea"></div>
+
+    <div id="right-sidebar">
+      <img src="img/logo-asl.jfif" alt="Logo ASL">
+      <div class="upload-section">
+        <h4>Enviar arquivos STL</h4>
+        <div class="file-input-group">
+          <input type="file" id="stlUploadInput" accept=".stl" multiple>
+          <label for="stlUploadInput" class="custom-file-upload">
+            Escolher arquivos
+          </label>
+          <span id="selectedFileNames">Nenhum arquivo escolhido</span>
+        </div>
+        <button id="uploadStlFiles">Enviar Arquivos</button>
+      </div>
+
+      <div class="visualize-section">
+        <h4>Visualizar STL</h4>
+        <div id="loadedStlFiles">
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const gallery = document.getElementById('gallery');
-      let scene, camera, renderer, controls, mesh;
+      let scene, camera, renderer, controls;
       let darkBackground = true;
       let keyPressed = {};
+      let isDragging = false;
+      let selectedObject = null;
+      let mouse = new THREE.Vector2();
+      let raycaster = new THREE.Raycaster();
+      let dragPlane = new THREE.Plane();
+      let offset = new THREE.Vector3();
+      const loadedModels = new Map(); // Store loaded meshes with their filenames
 
       function initRenderer() {
+        if (renderer) {
+          document.getElementById('renderArea').innerHTML = '';
+        }
+
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth - 250, window.innerHeight);
+        renderer = new THREE.WebGLRenderer({
+          antialias: true
+        });
+        const leftSidebarWidth = window.innerWidth <= 768 ? 0 :
+          window.innerWidth <= 1024 ? 220 :
+            window.innerWidth >= 1440 ? 300 : 250;
+        const rightSidebarWidth = window.innerWidth <= 768 ? 0 : 300;
+        renderer.setSize(window.innerWidth - leftSidebarWidth - rightSidebarWidth, window.innerHeight);
         renderer.setClearColor(darkBackground ? 0x000000 : 0xffffff);
-        
+
         const renderArea = document.getElementById('renderArea');
         renderArea.innerHTML = '';
         renderArea.appendChild(renderer.domElement);
 
-        // Iluminação melhorada
         scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-        
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(1, 1, 1);
         scene.add(directionalLight);
-        
         const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
         directionalLight2.position.set(-1, -1, -1);
         scene.add(directionalLight2);
@@ -77,26 +105,21 @@
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        
+
         camera.position.set(0, 0, 10);
         controls.update();
 
         animate();
       }
 
-      // Controles do teclado
       function setupKeyboardControls() {
         document.addEventListener('keydown', (event) => {
           keyPressed[event.code] = true;
-          
-          // Previne o comportamento padrão das setas
           if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.code)) {
             event.preventDefault();
           }
-          
           handleKeyPress(event.code);
         });
-
         document.addEventListener('keyup', (event) => {
           keyPressed[event.code] = false;
         });
@@ -104,28 +127,22 @@
 
       function handleKeyPress(keyCode) {
         if (!controls || !camera) return;
-
         const rotationSpeed = 0.1;
         const zoomSpeed = 0.1;
-
-        switch(keyCode) {
+        switch (keyCode) {
           case 'ArrowUp':
-            // Rotaciona para cima
             controls.object.position.y += Math.sin(controls.getPolarAngle()) * rotationSpeed;
             break;
           case 'ArrowDown':
-            // Rotaciona para baixo
             controls.object.position.y -= Math.sin(controls.getPolarAngle()) * rotationSpeed;
             break;
           case 'ArrowLeft':
-            // Rotaciona para esquerda
             const leftAngle = controls.getAzimuthalAngle() + rotationSpeed;
             const leftRadius = controls.getDistance();
             controls.object.position.x = controls.target.x + leftRadius * Math.sin(leftAngle);
             controls.object.position.z = controls.target.z + leftRadius * Math.cos(leftAngle);
             break;
           case 'ArrowRight':
-            // Rotaciona para direita
             const rightAngle = controls.getAzimuthalAngle() - rotationSpeed;
             const rightRadius = controls.getDistance();
             controls.object.position.x = controls.target.x + rightRadius * Math.sin(rightAngle);
@@ -133,31 +150,22 @@
             break;
           case 'Equal':
           case 'NumpadAdd':
-            // Zoom in
             camera.position.multiplyScalar(1 - zoomSpeed);
             break;
           case 'Minus':
           case 'NumpadSubtract':
-            // Zoom out
             camera.position.multiplyScalar(1 + zoomSpeed);
             break;
-          case 'KeyR':
-            // Reset câmera
-            resetCamera();
-            break;
+          
           case 'KeyB':
-            // Trocar fundo
             toggleBackground();
             break;
         }
-        
         controls.update();
       }
 
-      // Controle contínuo para teclas mantidas pressionadas
       function handleContinuousKeys() {
         if (!controls || !camera) return;
-
         const rotationSpeed = 0.02;
         const zoomSpeed = 0.02;
 
@@ -192,36 +200,31 @@
           const direction = camera.position.clone().sub(controls.target).normalize();
           camera.position.add(direction.multiplyScalar(zoomSpeed * 2));
         }
-
         controls.update();
       }
 
-      function loadGallery() {
-        fetch('/list-files')
-          .then(res => res.json())
-          .then(files => {
-            gallery.innerHTML = '';
-            files.forEach(file => {
-              const div = document.createElement('div');
-              div.classList.add('gallery-item');
-              div.textContent = file;
-              
-              div.addEventListener('click', () => {
-                console.log('Carregando arquivo:', file);
-                loadSTL(`/uploads/${file}`);
-              });
-              
-              gallery.appendChild(div);
-            });
-          })
-          .catch(err => {
-            console.error('Erro ao carregar galeria:', err);
-          });
+      function setIdealViewAndZoom() {
+        if (loadedModels.size === 0) return;
+        
+        const center = getBoundingBoxCenterAllModels();
+        const size = getBoundingBoxSizeAllModels();
+        
+        const idealDistance = size * 1.2;
+        
+        const cameraPosition = new THREE.Vector3(center.x, center.y - idealDistance, center.z);
+        
+        setCameraView(cameraPosition, center);
+        
+        console.log('Vista ajustada para oclusal inferior com zoom ideal');
       }
 
-      function loadSTL(url) {
+      function repositionModels() {
+          console.log('Repositioning models (no automatic vertical adjustment applied as per new strategy).');
+      }
+
+      function loadSTL(url, filename) {
         console.log('Iniciando carregamento do STL:', url);
-        
+
         if (!scene) {
           console.log('Inicializando renderer...');
           initRenderer();
@@ -229,76 +232,101 @@
 
         const loader = new THREE.STLLoader();
 
+        const loadedStlFilesDiv = document.getElementById('loadedStlFiles');
+        const stlFileItem = document.createElement('div');
+        stlFileItem.classList.add('stl-file-item');
+        stlFileItem.dataset.filename = filename;
+
+        const viewIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>`;
+        const hideIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.938 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/></svg>`;
+        const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/></svg>`;
+
+        stlFileItem.innerHTML = `
+          <div class="file-header">
+            <span class="file-name">${filename.replace('.stl', '').toUpperCase().replace('-', ' ')}</span>
+            <div class="file-actions">
+              <button class="action-button view-stl">${viewIcon}</button>
+              <button class="action-button delete-stl">${deleteIcon}</button>
+            </div>
+          </div>
+          <div class="progress-container">
+              <div class="progress-bar-wrapper">
+                  <div class="progress-bar" style="width: 0%;"></div>
+              </div>
+              <span class="progress-text">0%</span>
+          </div>
+        `;
+        loadedStlFilesDiv.appendChild(stlFileItem);
+
+        const progressBar = stlFileItem.querySelector('.progress-bar');
+        const progressText = stlFileItem.querySelector('.progress-text');
+        const viewButton = stlFileItem.querySelector('.view-stl');
+        const deleteButton = stlFileItem.querySelector('.delete-stl');
+
         loader.load(
           url,
-          function(geometry) {
+          function (geometry) {
             console.log('STL carregado com sucesso:', geometry);
-            
-            if (mesh) {
-              scene.remove(mesh);
-            }
 
-            geometry.computeBoundingBox();
-            const center = new THREE.Vector3();
-            geometry.boundingBox.getCenter(center);
-            geometry.translate(-center.x, -center.y, -center.z);
-
-            const material = new THREE.MeshLambertMaterial({ 
-              
+            const material = new THREE.MeshLambertMaterial({
+              color: 0xf0f0f0, 
+              transparent: false,
+              opacity: 1.0
             });
-            
-            mesh = new THREE.Mesh(geometry, material);
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.userData.filename = filename; 
             scene.add(mesh);
-            
+            loadedModels.set(filename, mesh);
+
             console.log('Mesh adicionado à cena');
-            zoomExtents();
+
+            progressBar.style.width = '100%';
+            progressText.textContent = '100%';
+            setTimeout(() => {
+              stlFileItem.querySelector('.progress-container').style.display = 'none';
+            }, 500);
+
+            setTimeout(() => {
+              setIdealViewAndZoom();
+            }, 100);
+
+            viewButton.addEventListener('click', () => {
+              mesh.visible = !mesh.visible;
+              viewButton.innerHTML = mesh.visible ? viewIcon : hideIcon;
+              setIdealViewAndZoom();
+            });
+
+            deleteButton.addEventListener('click', () => {
+              scene.remove(mesh);
+              loadedModels.delete(filename);
+              stlFileItem.remove(); // Adicionado para remover o elemento da lista
+              setIdealViewAndZoom(); 
+            });
+
           },
-          function(progress) {
-            console.log('Progresso do carregamento:', (progress.loaded / progress.total * 100) + '%');
+          function (progress) {
+            const percent = (progress.loaded / progress.total * 100);
+            console.log('Progresso do carregamento:', percent.toFixed(2) + '%');
+            progressBar.style.width = percent + '%';
+            progressText.textContent = percent.toFixed(0) + '%';
           },
-          function(error) {
+          function (error) {
             console.error('Erro ao carregar STL:', error);
             alert('Erro ao carregar o arquivo STL. Verifique se o arquivo é válido.');
+            stlFileItem.remove();
           }
         );
       }
 
-      function zoomExtents() {
-        if (!mesh) {
-          console.log('Nenhum mesh para ajustar zoom');
-          return;
-        }
-        
-        const box = new THREE.Box3().setFromObject(mesh);
-        const size = box.getSize(new THREE.Vector3()).length();
-        const center = box.getCenter(new THREE.Vector3());
-
-        console.log('Ajustando câmera - Tamanho:', size, 'Centro:', center);
-
-        camera.near = size / 1000;
-        camera.far = size * 1000;
-        camera.updateProjectionMatrix();
-        
-        const distance = size * 1.5;
-        camera.position.copy(center);
-        camera.position.x += distance;
-        camera.position.y += distance * 0.5;
-        camera.position.z += distance;
-        
-        camera.lookAt(center);
-        controls.target.copy(center);
-        controls.update();
-        
-        console.log('Câmera ajustada');
-      }
-
-      function resetCamera() {
-        if (mesh) {
-          zoomExtents();
+      function toggleFullscreen() {
+        const viewer = document.getElementById('viewer');
+        if (!document.fullscreenElement) {
+          viewer.requestFullscreen().catch(err => {
+            alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+          });
         } else {
-          camera.position.set(0, 0, 10);
-          controls.target.set(0, 0, 0);
-          controls.update();
+          document.exitFullscreen();
         }
       }
 
@@ -311,14 +339,107 @@
 
       function animate() {
         requestAnimationFrame(animate);
-        handleContinuousKeys(); // Processa teclas mantidas pressionadas
+        handleContinuousKeys();
         if (controls) controls.update();
         if (renderer && scene && camera) {
           renderer.render(scene, camera);
         }
       }
 
-      // Controle do menu mobile
+      function setCameraView(position, target) {
+        if (!camera || !controls) return;
+        camera.position.copy(position);
+        controls.target.copy(target);
+        controls.update();
+      }
+
+      function getBoundingBoxCenterAllModels() {
+        const box = new THREE.Box3();
+        loadedModels.forEach(mesh => {
+          if (mesh.visible) {
+            const meshBox = new THREE.Box3().setFromObject(mesh);
+            box.union(meshBox);
+          }
+        });
+        if (box.isEmpty()) return new THREE.Vector3(0, 0, 0);
+        return box.getCenter(new THREE.Vector3());
+      }
+
+      function getBoundingBoxSizeAllModels() {
+        const box = new THREE.Box3();
+        loadedModels.forEach(mesh => {
+          if (mesh.visible) {
+            const meshBox = new THREE.Box3().setFromObject(mesh);
+            box.union(meshBox);
+          }
+        });
+        if (box.isEmpty()) return 10;
+        return box.getSize(new THREE.Vector3()).length();
+      }
+
+      document.getElementById('viewLeft').addEventListener('click', () => {
+        const center = getBoundingBoxCenterAllModels();
+        const size = getBoundingBoxSizeAllModels();
+        const distance = size * 1.5;
+        setCameraView(new THREE.Vector3(center.x - distance, center.y, center.z), center);
+      });
+
+      document.getElementById('viewRight').addEventListener('click', () => {
+        const center = getBoundingBoxCenterAllModels();
+        const size = getBoundingBoxSizeAllModels();
+        const distance = size * 1.5;
+        setCameraView(new THREE.Vector3(center.x + distance, center.y, center.z), center);
+      });
+
+      document.getElementById('viewTop').addEventListener('click', () => {
+        const center = getBoundingBoxCenterAllModels();
+        const size = getBoundingBoxSizeAllModels();
+        const distance = size * 1.5;
+        setCameraView(new THREE.Vector3(center.x, center.y + distance, center.z), center);
+      });
+
+      document.getElementById('viewBottom').addEventListener('click', () => {
+        const center = getBoundingBoxCenterAllModels();
+        const size = getBoundingBoxSizeAllModels();
+        const distance = size * 1.5;
+        setCameraView(new THREE.Vector3(center.x, center.y - distance, center.z), center);
+      });
+
+      const stlUploadInput = document.getElementById('stlUploadInput');
+      const selectedFileNamesSpan = document.getElementById('selectedFileNames');
+      const uploadStlFilesButton = document.getElementById('uploadStlFiles');
+
+      stlUploadInput.addEventListener('change', (event) => {
+        if (event.target.files.length > 0) {
+          let names = Array.from(event.target.files).map(file => file.name).join(', ');
+          selectedFileNamesSpan.textContent = names;
+        } else {
+          selectedFileNamesSpan.textContent = 'Nenhum arquivo escolhido';
+        }
+      });
+
+      uploadStlFilesButton.addEventListener('click', () => {
+        const files = stlUploadInput.files;
+        if (files.length === 0) {
+          alert('Por favor, selecione um ou mais arquivos STL para enviar.');
+          return;
+        }
+
+        Array.from(files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const url = URL.createObjectURL(new Blob([e.target.result], {
+              type: 'application/octet-stream'
+            }));
+            loadSTL(url, file.name);
+          };
+          reader.readAsArrayBuffer(file);
+        });
+
+        stlUploadInput.value = '';
+        selectedFileNamesSpan.textContent = 'Nenhum arquivo escolhido';
+      });
+
       function setupMobileMenu() {
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
@@ -333,29 +454,17 @@
           sidebar.classList.remove('active');
           overlay.classList.remove('active');
         });
-
-        // Fechar menu ao clicar em um item da galeria
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        galleryItems.forEach(item => {
-          item.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-              sidebar.classList.remove('active');
-              overlay.classList.remove('active');
-            }
-          });
-        });
       }
 
-      // Redimensionamento responsivo do renderer
       function handleResize() {
         if (camera && renderer) {
-          const sidebarWidth = window.innerWidth <= 768 ? 0 : 
-                              window.innerWidth <= 1024 ? 220 : 
-                              window.innerWidth >= 1440 ? 300 : 250;
-          
-          const width = window.innerWidth - sidebarWidth;
+          const leftSidebarWidth = window.innerWidth <= 768 ? 0 :
+            window.innerWidth <= 1024 ? 220 :
+              window.innerWidth >= 1440 ? 300 : 250;
+          const rightSidebarWidth = window.innerWidth <= 768 ? 0 : 300;
+          const width = window.innerWidth - leftSidebarWidth - rightSidebarWidth;
           const height = window.innerHeight;
-          
+
           camera.aspect = width / height;
           camera.updateProjectionMatrix();
           renderer.setSize(width, height);
@@ -363,17 +472,14 @@
       }
 
       window.addEventListener('resize', handleResize);
-      
-      // Inicializa menu mobile
+
       setupMobileMenu();
-      
-      document.getElementById('resetCamera').addEventListener('click', resetCamera);
-      document.getElementById('zoomExtents').addEventListener('click', zoomExtents);
+
+      document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
       document.getElementById('toggleBackground').addEventListener('click', toggleBackground);
 
-      // Inicializa controles do teclado
       setupKeyboardControls();
-      loadGallery();
+      initRenderer();
     });
   </script>
 </body>

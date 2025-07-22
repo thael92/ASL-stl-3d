@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.x = -Math.PI / 2; // Orientação de boca
         scene.add(mesh);
         
         console.log('Mesh adicionado à cena');
@@ -126,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     const box = new THREE.Box3().setFromObject(mesh);
+    const sizeVec = new THREE.Vector3();
+    box.getSize(sizeVec);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
 
@@ -136,12 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.far = size * 1000;
     camera.updateProjectionMatrix();
     
-    // Posiciona a câmera
-    const distance = size * 1.5;
+    // Posiciona a câmera para uma visão de "boca"
+    const distance = Math.max(sizeVec.x, sizeVec.y, sizeVec.z) * 1.2;
     camera.position.copy(center);
-    camera.position.x += distance;
-    camera.position.y += distance * 0.5;
-    camera.position.z += distance;
+    camera.position.y += sizeVec.y / 2; // Um pouco acima
+    camera.position.z += distance; // Frontal
     
     camera.lookAt(center);
     controls.target.copy(center);
